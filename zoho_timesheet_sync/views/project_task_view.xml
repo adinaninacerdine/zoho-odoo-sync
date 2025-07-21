@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form_zoho" model="ir.ui.view">
+        <field name="name">project.task.form.zoho</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Synchronisation">
+                    <group>
+                        <field name="x_priority_score"/>
+                        <field name="x_last_sync"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_kanban_zoho" model="ir.ui.view">
+        <field name="name">project.task.kanban.zoho</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_group_by">stage_id</attribute>
+            </xpath>
+            <xpath expr="//kanban/field[@name='color']" position="after">
+                <field name="x_priority_score"/>
+            </xpath>
+            <xpath expr="//kanban" position="inside">
+                <progressbar field="kanban_state" colors='{"done": "success", "blocked": "danger"}'/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_kanban_bottom_right')]" position="inside">
+                <div class="oe_kanban_bottom_right">
+                    <field name="effective_hours" widget="float_time"/>
+                    / <field name="planned_hours" widget="float_time"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
