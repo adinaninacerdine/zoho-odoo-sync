@@ -21,20 +21,8 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_kanban"/>
         <field name="arch" type="xml">
-            <xpath expr="//kanban" position="attributes">
-                <attribute name="default_group_by">stage_id</attribute>
-            </xpath>
-            <xpath expr="//kanban/field[@name='color']" position="after">
-                <field name="x_priority_score"/>
-            </xpath>
-            <xpath expr="//kanban" position="inside">
-                <progressbar field="kanban_state" colors='{"done": "success", "blocked": "danger"}'/>
-            </xpath>
-            <xpath expr="//div[hasclass('oe_kanban_bottom_right')]" position="inside">
-                <div class="oe_kanban_bottom_right">
-                    <field name="effective_hours" widget="float_time"/>
-                    / <field name="planned_hours" widget="float_time"/>
-                </div>
+            <xpath expr="//kanban/templates/t/div[1]" position="inside">
+                <field name="x_priority_score" invisible="1"/>
             </xpath>
         </field>
     </record>
