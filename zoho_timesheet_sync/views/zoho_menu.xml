@@ -55,6 +55,23 @@
                   groups="zoho_timesheet_sync.group_zoho_admin"
                   sequence="5"/>
         
+        <!-- Action pour l'assistant de synchronisation en masse -->
+        <record id="action_mass_sync_wizard" model="ir.actions.act_window">
+            <field name="name">Synchronisation en Masse Zoho</field>
+            <field name="res_model">zoho.mass.sync.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Synchroniser vos projets existants avec Zoho
+                </p>
+                <p>
+                    Cet assistant vous permet de synchroniser en une fois tous vos projets existants 
+                    avec Zoho WorkDrive et Cliq.
+                </p>
+            </field>
+        </record>
+        
         <!-- Menu synchronisation masse -->
         <menuitem id="menu_mass_sync"
                   name="🔄 Synchronisation en Masse"
