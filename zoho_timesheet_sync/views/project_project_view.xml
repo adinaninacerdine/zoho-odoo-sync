@@ -1,23 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_project_project_form_zoho" model="ir.ui.view">
-        <field name="name">project.project.form.zoho</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project.edit_project"/>
-        <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook" position="inside">
-                <page string="Synchronisation Zoho">
-                    <group>
-                        <group string="Configuration Zoho">
-                            <field name="x_zoho_folder_id"/>
-                            <field name="x_cliq_channel"/>
+    <data>
+        
+        <!-- Vue formulaire projet enrichie avec Zoho -->
+        <record id="view_project_project_form_zoho" model="ir.ui.view">
+            <field name="name">project.project.form.zoho</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                
+                <!-- Badge statut Zoho en haut -->
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="alert alert-success" role="alert" 
+                         attrs="{'invisible': [('x_sync_status', '!=', 'synced')]}">
+                        <strong><i class="fa fa-check-circle"/> Synchronisé avec Zoho</strong>
+                        <span class="ml-2">Ce projet est connecté aux services Zoho</span>
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         attrs="{'invisible': [('x_sync_status', '!=', 'pending')]}">
+                        <strong><i class="fa fa-clock-o"/> Synchronisation en cours...</strong>
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         attrs="{'invisible': [('x_sync_status', '!=', 'error')]}">
+                        <strong><i class="fa fa-exclamation-triangle"/> Erreur de synchronisation</strong>
+                    </div>
+                </xpath>
+                
+                <!-- Onglet Zoho amélioré -->
+                <xpath expr="//sheet/notebook" position="inside">
+                    <page string="🔗 Synchronisation Zoho" name="zoho_sync">
+                        <group>
+                            <group string="📁 WorkDrive">
+                                <field name="x_zoho_folder_id" 
+                                       placeholder="ID du dossier sera généré automatiquement"/>
+                                <button name="%(zoho_timesheet_sync.action_sync_project)d" 
+                                        type="action" 
+                                        string="🔄 Synchroniser vers WorkDrive"
+                                        class="btn-primary"
+                                        groups="zoho_timesheet_sync.group_zoho_admin"/>
+                            </group>
+                            <group string="💬 Cliq">
+                                <field name="x_cliq_channel" 
+                                       placeholder="Nom du canal sera généré automatiquement"/>
+                                <button name="%(zoho_timesheet_sync.action_sync_project)d" 
+                                        type="action" 
+                                        string="🔄 Synchroniser vers Cliq"
+                                        class="btn-info"
+                                        groups="zoho_timesheet_sync.group_zoho_admin"/>
+                            </group>
                         </group>
-                        <group string="Statut">
-                            <field name="x_sync_status"/>
+                        
+                        <group string="📊 Statut de synchronisation">
+                            <field name="x_sync_status" widget="badge"/>
                         </group>
-                    </group>
-                </page>
-            </xpath>
-        </field>
-    </record>
+                        
+                        <div class="mt-3" groups="zoho_timesheet_sync.group_zoho_admin">
+                            <button name="action_manual_sync" 
+                                    type="object" 
+                                    string="🚀 Synchronisation Complète"
+                                    class="btn btn-primary btn-lg"
+                                    help="Lance une synchronisation complète vers tous les services Zoho"/>
+                        </div>
+                        
+                    </page>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <!-- Vue liste avec indicateurs visuels -->
+        <record id="view_project_project_tree_zoho" model="ir.ui.view">
+            <field name="name">project.project.tree.zoho</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_project_tree"/>
+            <field name="arch" type="xml">
+                
+                <!-- Coloration selon statut sync -->
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-success">x_sync_status == 'synced'</attribute>
+                    <attribute name="decoration-warning">x_sync_status == 'pending'</attribute>
+                    <attribute name="decoration-danger">x_sync_status == 'error'</attribute>
+                </xpath>
+                
+                <!-- Colonnes Zoho -->
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="x_sync_status" string="🔗 Zoho" widget="badge"/>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <!-- Actions de synchronisation -->
+        <record id="action_sync_project" model="ir.actions.server">
+            <field name="name">Synchroniser avec Zoho</field>
+            <field name="model_id" ref="project.model_project_project"/>
+            <field name="binding_model_id" ref="project.model_project_project"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">
+                zoho_service = env['zoho.api.service']
+                for record in records:
+                    try:
+                        zoho_service.sync_project_to_workdrive(record.id)
+                        record.message_post(body="✅ Synchronisation Zoho réussie")
+                    except Exception as e:
+                        record.message_post(body=f"❌ Erreur synchronisation: {e}")
+            </field>
+        </record>
+        
+    </data>
 </odoo>

@@ -11,6 +11,7 @@
         "security/ir.model.access.csv",
         "views/project_project_view.xml",
         "views/project_task_view.xml",
+        "views/zoho_menu.xml",
     ],
     "installable": True,
     "application": False,

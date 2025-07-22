@@ -1,5 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_project_project_all,project.project.all,project.model_project_project,base.group_user,1,1,1,0
-access_project_task_all,project.task.all,project.model_project_task,base.group_user,1,1,1,0
-access_project_project_manager,project.project.manager,project.model_project_project,project.group_project_manager,1,1,1,1
-access_project_task_manager,project.task.manager,project.model_project_task,project.group_project_manager,1,1,1,1
+access_zoho_api_service_user,zoho.api.service,model_zoho_api_service,base.group_user,1,0,0,0
+access_zoho_api_service_admin,zoho.api.service,model_zoho_api_service,zoho_timesheet_sync.group_zoho_admin,1,1,1,1

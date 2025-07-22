@@ -40,3 +40,46 @@ class ProjectProject(models.Model):
         for record in self:
             if record.x_cliq_channel and len(record.x_cliq_channel) > 50:
                 raise ValidationError(_('Cliq channel name cannot exceed 50 characters'))
+    
+    def action_manual_sync(self):
+        """Action pour synchronisation manuelle vers Zoho"""
+        for project in self:
+            try:
+                zoho_service = self.env['zoho.api.service']
+                
+                # Synchroniser vers WorkDrive
+                success_workdrive = zoho_service.sync_project_to_workdrive(project.id)
+                
+                if success_workdrive:
+                    project.message_post(
+                        body="✅ <b>Synchronisation WorkDrive réussie</b><br/>Dossier créé avec succès",
+                        message_type='notification'
+                    )
+                
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Synchronisation Zoho'),
+                        'message': _('Synchronisation lancée pour le projet "%s"') % project.name,
+                        'type': 'success' if success_workdrive else 'warning',
+                        'sticky': False,
+                    }
+                }
+                
+            except Exception as e:
+                _logger.error("Manual sync failed for project %s: %s", project.name, e)
+                project.message_post(
+                    body=f"❌ <b>Erreur de synchronisation</b><br/>{str(e)}",
+                    message_type='notification'
+                )
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Erreur'),
+                        'message': _('Échec de synchronisation: %s') % str(e),
+                        'type': 'danger',
+                        'sticky': True,
+                    }
+                }

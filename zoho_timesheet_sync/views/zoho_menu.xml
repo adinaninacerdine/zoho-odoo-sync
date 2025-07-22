@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Menu principal Zoho -->
+        <menuitem id="menu_zoho_main" 
+                  name="Zoho Integration" 
+                  groups="zoho_timesheet_sync.group_zoho_admin"
+                  web_icon="zoho_timesheet_sync,static/description/icon.png"
+                  sequence="90"/>
+        
+        <!-- Sous-menu Configuration -->
+        <menuitem id="menu_zoho_config" 
+                  name="Configuration" 
+                  parent="menu_zoho_main"
+                  groups="zoho_timesheet_sync.group_zoho_admin"
+                  sequence="10"/>
+        
+        <!-- Action pour voir les projets avec sync Zoho -->
+        <record id="action_project_zoho_sync" model="ir.actions.act_window">
+            <field name="name">Projets Zoho</field>
+            <field name="res_model">project.project</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('x_sync_status', '!=', False)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun projet synchronisé avec Zoho
+                </p>
+                <p>
+                    Les projets avec synchronisation Zoho apparaîtront ici.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Menu pour les projets Zoho -->
+        <menuitem id="menu_project_zoho_sync"
+                  name="Projets Synchronisés"
+                  parent="menu_zoho_main"
+                  action="action_project_zoho_sync"
+                  groups="base.group_user"
+                  sequence="20"/>
+        
+    </data>
+</odoo>
