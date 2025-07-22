@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Template de succès -->
+        <template id="auth_success_template" name="Zoho Auth Success">
+            <html>
+                <head>
+                    <title>Authentification Zoho</title>
+                    <meta charset="utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f8f9fa; }
+                        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                        .success { color: #28a745; font-size: 48px; margin-bottom: 20px; }
+                        h1 { color: #333; margin-bottom: 20px; }
+                        p { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+                        .btn { display: inline-block; padding: 12px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+                        .btn:hover { background: #0056b3; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="success">✅</div>
+                        <h1><t t-esc="title"/></h1>
+                        <p><t t-esc="message"/></p>
+                        <p>Vous pouvez maintenant créer des projets qui seront automatiquement synchronisés avec Zoho WorkDrive et Cliq.</p>
+                        <a href="/web" class="btn">Retourner à Odoo</a>
+                    </div>
+                </body>
+            </html>
+        </template>
+        
+        <!-- Template d'erreur -->
+        <template id="auth_error_template" name="Zoho Auth Error">
+            <html>
+                <head>
+                    <title>Erreur Authentification Zoho</title>
+                    <meta charset="utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f8f9fa; }
+                        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                        .error { color: #dc3545; font-size: 48px; margin-bottom: 20px; }
+                        h1 { color: #333; margin-bottom: 20px; }
+                        p { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+                        .btn { display: inline-block; padding: 12px 30px; background: #6c757d; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+                        .btn:hover { background: #545b62; }
+                        .error-details { background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 5px; margin: 20px 0; color: #721c24; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="error">❌</div>
+                        <h1><t t-esc="title"/></h1>
+                        <div class="error-details">
+                            <strong>Erreur:</strong> <t t-esc="error"/>
+                        </div>
+                        <p>Veuillez vérifier votre configuration Zoho et réessayer.</p>
+                        <a href="/web" class="btn">Retourner à Odoo</a>
+                    </div>
+                </body>
+            </html>
+        </template>
+        
+    </data>
+</odoo>

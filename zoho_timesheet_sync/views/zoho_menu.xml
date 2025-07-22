@@ -40,5 +40,20 @@
                   groups="base.group_user"
                   sequence="20"/>
         
+        <!-- Action pour l'authentification Zoho -->
+        <record id="action_zoho_auth" model="ir.actions.act_url">
+            <field name="name">Authentification Zoho</field>
+            <field name="url">/zoho/auth/start</field>
+            <field name="target">new</field>
+        </record>
+        
+        <!-- Menu authentification -->
+        <menuitem id="menu_zoho_auth"
+                  name="🔑 Authentification"
+                  parent="menu_zoho_config"
+                  action="action_zoho_auth"
+                  groups="zoho_timesheet_sync.group_zoho_admin"
+                  sequence="5"/>
+        
     </data>
 </odoo>

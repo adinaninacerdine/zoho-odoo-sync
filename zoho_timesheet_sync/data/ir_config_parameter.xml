@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Paramètres par défaut Zoho -->
+        <record id="zoho_base_url_default" model="ir.config_parameter">
+            <field name="key">zoho.base_url</field>
+            <field name="value">https://www.zohoapis.com</field>
+        </record>
+        
+    </data>
+</odoo>
