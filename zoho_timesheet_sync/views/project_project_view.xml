@@ -33,8 +33,8 @@
                             <group string="📁 WorkDrive">
                                 <field name="x_zoho_folder_id" 
                                        placeholder="ID du dossier sera généré automatiquement"/>
-                                <button name="%(zoho_timesheet_sync.action_sync_project)d" 
-                                        type="action" 
+                                <button name="action_manual_sync" 
+                                        type="object" 
                                         string="🔄 Synchroniser vers WorkDrive"
                                         class="btn-primary"
                                         groups="zoho_timesheet_sync.group_zoho_admin"/>
@@ -42,8 +42,8 @@
                             <group string="💬 Cliq">
                                 <field name="x_cliq_channel" 
                                        placeholder="Nom du canal sera généré automatiquement"/>
-                                <button name="%(zoho_timesheet_sync.action_sync_project)d" 
-                                        type="action" 
+                                <button name="action_manual_sync" 
+                                        type="object" 
                                         string="🔄 Synchroniser vers Cliq"
                                         class="btn-info"
                                         groups="zoho_timesheet_sync.group_zoho_admin"/>
@@ -90,21 +90,16 @@
             </field>
         </record>
         
-        <!-- Actions de synchronisation -->
-        <record id="action_sync_project" model="ir.actions.server">
+        <!-- Action serveur pour synchronisation automatique (optionnelle) -->
+        <record id="action_sync_project_server" model="ir.actions.server">
             <field name="name">Synchroniser avec Zoho</field>
             <field name="model_id" ref="project.model_project_project"/>
             <field name="binding_model_id" ref="project.model_project_project"/>
-            <field name="binding_view_types">form</field>
+            <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
             <field name="code">
-                zoho_service = env['zoho.api.service']
                 for record in records:
-                    try:
-                        zoho_service.sync_project_to_workdrive(record.id)
-                        record.message_post(body="✅ Synchronisation Zoho réussie")
-                    except Exception as e:
-                        record.message_post(body=f"❌ Erreur synchronisation: {e}")
+                    record.action_manual_sync()
             </field>
         </record>
         
