@@ -55,5 +55,13 @@
                   groups="zoho_timesheet_sync.group_zoho_admin"
                   sequence="5"/>
         
+        <!-- Menu synchronisation masse -->
+        <menuitem id="menu_mass_sync"
+                  name="🔄 Synchronisation en Masse"
+                  parent="menu_zoho_config"
+                  action="action_mass_sync_wizard"
+                  groups="zoho_timesheet_sync.group_zoho_admin"
+                  sequence="10"/>
+        
     </data>
 </odoo>

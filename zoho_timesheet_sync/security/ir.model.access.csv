@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_zoho_api_service_user,zoho.api.service,model_zoho_api_service,base.group_user,1,0,0,0
 access_zoho_api_service_admin,zoho.api.service,model_zoho_api_service,zoho_timesheet_sync.group_zoho_admin,1,1,1,1
+access_mass_sync_wizard_admin,zoho.mass.sync.wizard,model_zoho_mass_sync_wizard,zoho_timesheet_sync.group_zoho_admin,1,1,1,1

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vue formulaire de l'assistant -->
+        <record id="view_mass_sync_wizard_form" model="ir.ui.view">
+            <field name="name">zoho.mass.sync.wizard.form</field>
+            <field name="model">zoho.mass.sync.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Synchronisation en Masse - Zoho">
+                    
+                    <!-- Configuration -->
+                    <div invisible="state != 'draft'">
+                        <group>
+                            <group string="🎯 Projets à synchroniser">
+                                <field name="project_ids" widget="many2many_tags" 
+                                       options="{'no_create': True}"/>
+                                <field name="only_pending"/>
+                            </group>
+                            <group string="🔧 Options de synchronisation">
+                                <field name="sync_workdrive"/>
+                                <field name="sync_cliq"/>
+                            </group>
+                        </group>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong><i class="fa fa-info-circle"/> Information</strong>
+                            <p>Cette action va créer automatiquement des dossiers WorkDrive et/ou des canaux Cliq pour les projets sélectionnés.</p>
+                            <p>Les projets déjà synchronisés seront ignorés si "Seulement les projets non synchronisés" est coché.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Progression -->
+                    <div invisible="state == 'draft'">
+                        <group string="📊 Progression">
+                            <field name="success_count" readonly="1"/>
+                            <field name="error_count" readonly="1"/>
+                        </group>
+                        
+                        <group string="📝 Détails" invisible="state == 'draft'">
+                            <field name="progress" widget="text" readonly="1" 
+                                   options="{'style': 'font-family: monospace; white-space: pre-wrap;'}"/>
+                        </group>
+                    </div>
+                    
+                    <!-- État caché -->
+                    <field name="state" invisible="1"/>
+                    
+                    <!-- Boutons -->
+                    <footer>
+                        <button name="action_start_sync" type="object" 
+                                string="🚀 Lancer la Synchronisation" 
+                                class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        
+                        <div invisible="state != 'running'">
+                            <span class="text-info">
+                                <i class="fa fa-spinner fa-spin"/> Synchronisation en cours...
+                            </span>
+                        </div>
+                        
+                        <button name="action_view_synced_projects" type="object"
+                                string="📋 Voir les Projets Synchronisés"
+                                class="btn-info"
+                                invisible="state != 'done' or success_count == 0"/>
+                        
+                        <button name="action_close" type="object"
+                                string="Fermer" 
+                                class="btn-secondary"
+                                invisible="state == 'running'"/>
+                        
+                        <button string="Annuler" class="btn-secondary" special="cancel"
+                                invisible="state != 'draft'"/>
+                    </footer>
+                    
+                </form>
+            </field>
+        </record>
+        
+        <!-- Action pour l'assistant -->
+        <record id="action_mass_sync_wizard" model="ir.actions.act_window">
+            <field name="name">Synchronisation en Masse Zoho</field>
+            <field name="res_model">zoho.mass.sync.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Synchroniser vos projets existants avec Zoho
+                </p>
+                <p>
+                    Cet assistant vous permet de synchroniser en une fois tous vos projets existants 
+                    avec Zoho WorkDrive et Cliq.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

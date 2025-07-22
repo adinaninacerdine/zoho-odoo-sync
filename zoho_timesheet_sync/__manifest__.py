@@ -14,6 +14,7 @@
         "views/project_task_view.xml",
         "views/zoho_menu.xml",
         "views/auth_templates.xml",
+        "views/mass_sync_wizard_views.xml",
     ],
     "installable": True,
     "application": False,
