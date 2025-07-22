@@ -7,6 +7,7 @@
     "website": "https://github.com/your-repo/timesheet",
     "depends": ["hr_timesheet", "project"],
     "data": [
+        "security/security.xml",
         "security/ir.model.access.csv",
         "views/project_project_view.xml",
         "views/project_task_view.xml",
