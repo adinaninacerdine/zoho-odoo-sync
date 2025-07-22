@@ -2,16 +2,15 @@
 <odoo>
     <data>
         
-        <!-- Menu principal Zoho -->
+        <!-- Menu principal Zoho - accessible à tous -->
         <menuitem id="menu_zoho_main" 
                   name="Zoho Integration" 
-                  groups="zoho_timesheet_sync.group_zoho_admin"
-                  web_icon="zoho_timesheet_sync,static/description/icon.png"
+                  groups="base.group_user"
                   sequence="90"/>
         
         <!-- Sous-menu Configuration -->
         <menuitem id="menu_zoho_config" 
-                  name="Configuration" 
+                  name="⚙️ Paramètres Zoho" 
                   parent="menu_zoho_main"
                   groups="zoho_timesheet_sync.group_zoho_admin"
                   sequence="10"/>
