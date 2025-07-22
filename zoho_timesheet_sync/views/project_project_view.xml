@@ -68,27 +68,7 @@
             </field>
         </record>
         
-        <!-- Vue liste avec indicateurs visuels -->
-        <record id="view_project_project_tree_zoho" model="ir.ui.view">
-            <field name="name">project.project.tree.zoho</field>
-            <field name="model">project.project</field>
-            <field name="inherit_id" ref="project.view_project_project_tree"/>
-            <field name="arch" type="xml">
-                
-                <!-- Coloration selon statut sync -->
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="decoration-success">x_sync_status == 'synced'</attribute>
-                    <attribute name="decoration-warning">x_sync_status == 'pending'</attribute>
-                    <attribute name="decoration-danger">x_sync_status == 'error'</attribute>
-                </xpath>
-                
-                <!-- Colonnes Zoho -->
-                <xpath expr="//field[@name='user_id']" position="after">
-                    <field name="x_sync_status" string="🔗 Zoho" widget="badge"/>
-                </xpath>
-                
-            </field>
-        </record>
+        <!-- Vue liste sera ajoutée ultérieurement -->
         
         <!-- Action serveur pour synchronisation automatique (optionnelle) -->
         <record id="action_sync_project_server" model="ir.actions.server">
