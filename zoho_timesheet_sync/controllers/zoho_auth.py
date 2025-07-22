@@ -27,7 +27,7 @@ class ZohoAuthController(http.Controller):
             redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/zoho/auth/callback"
             
             oauth_params = {
-                'scope': 'ZohoWorkDrive.files.all,ZohoCliq.channels.all',
+                'scope': 'ZohoWorkDrive.files.read,ZohoWorkDrive.files.create',
                 'client_id': client_id,
                 'response_type': 'code',
                 'redirect_uri': redirect_uri,
@@ -47,15 +47,20 @@ class ZohoAuthController(http.Controller):
     def auth_callback(self, **kwargs):
         """Callback après authentification Zoho"""
         
+        # Debug: Log tous les paramètres reçus
+        _logger.info("Callback parameters received: %s", kwargs)
+        
         code = kwargs.get('code')
         error = kwargs.get('error')
+        error_description = kwargs.get('error_description', '')
         
         if error:
-            _logger.error("Zoho OAuth error: %s", error)
-            return self._render_error(f"Erreur Zoho: {error}")
+            _logger.error("Zoho OAuth error: %s - %s", error, error_description)
+            return self._render_error(f"Erreur Zoho: {error} - {error_description}")
         
         if not code:
-            return self._render_error("Code d'autorisation manquant")
+            _logger.error("No authorization code received. Full callback data: %s", kwargs)
+            return self._render_error(f"Code d'autorisation manquant. Paramètres reçus: {list(kwargs.keys())}")
         
         try:
             # Échanger le code contre un refresh token
