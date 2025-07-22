@@ -27,12 +27,11 @@ class ZohoAuthController(http.Controller):
             redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/zoho/auth/callback"
             
             oauth_params = {
-                'scope': 'ZohoWorkDrive.files.ALL,ZohoCliq.channels.ALL',
+                'scope': 'ZohoWorkDrive.files.all,ZohoCliq.channels.all',
                 'client_id': client_id,
                 'response_type': 'code',
                 'redirect_uri': redirect_uri,
-                'access_type': 'offline',
-                'prompt': 'consent'
+                'access_type': 'offline'
             }
             
             auth_url = f"https://accounts.zoho.com/oauth/v2/auth?{urlencode(oauth_params)}"
