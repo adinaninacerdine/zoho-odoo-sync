@@ -12,16 +12,16 @@
                 <!-- Badge statut Zoho en haut -->
                 <xpath expr="//div[@class='oe_title']" position="after">
                     <div class="alert alert-success" role="alert" 
-                         attrs="{'invisible': [('x_sync_status', '!=', 'synced')]}">
+                         invisible="x_sync_status != 'synced'">
                         <strong><i class="fa fa-check-circle"/> Synchronisé avec Zoho</strong>
                         <span class="ml-2">Ce projet est connecté aux services Zoho</span>
                     </div>
                     <div class="alert alert-warning" role="alert"
-                         attrs="{'invisible': [('x_sync_status', '!=', 'pending')]}">
+                         invisible="x_sync_status != 'pending'">
                         <strong><i class="fa fa-clock-o"/> Synchronisation en cours...</strong>
                     </div>
                     <div class="alert alert-danger" role="alert"
-                         attrs="{'invisible': [('x_sync_status', '!=', 'error')]}">
+                         invisible="x_sync_status != 'error'">
                         <strong><i class="fa fa-exclamation-triangle"/> Erreur de synchronisation</strong>
                     </div>
                 </xpath>
