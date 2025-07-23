@@ -12,6 +12,7 @@
         "data/ir_config_parameter.xml",
         "views/project_project_view.xml",
         "views/project_task_view.xml",
+        "views/zoho_config_wizard.xml",
         "views/zoho_menu.xml",
         "views/auth_templates.xml",
         "views/mass_sync_wizard_views.xml",
