@@ -43,7 +43,7 @@ class ZohoAuthController(http.Controller):
             _logger.error("Auth start error: %s", e)
             return self._render_error(f"Erreur d'authentification: {str(e)}")
     
-    @http.route('/zoho/auth/callback', type='http', auth='user', methods=['GET'])  
+    @http.route('/zoho/auth/callback', type='http', auth='public', methods=['GET', 'POST'])  
     def auth_callback(self, **kwargs):
         """Callback après authentification Zoho"""
         
