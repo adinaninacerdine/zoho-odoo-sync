@@ -8,16 +8,6 @@
             <field name="value">https://www.zohoapis.com</field>
         </record>
         
-        <!-- Placeholders pour les paramètres OAuth (à configurer par l'utilisateur) -->
-        <record id="zoho_client_id_placeholder" model="ir.config_parameter">
-            <field name="key">zoho.client_id</field>
-            <field name="value"></field>
-        </record>
-        
-        <record id="zoho_client_secret_placeholder" model="ir.config_parameter">
-            <field name="key">zoho.client_secret</field>
-            <field name="value"></field>
-        </record>
         
     </data>
 </odoo>
