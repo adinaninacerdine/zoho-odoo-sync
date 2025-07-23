@@ -62,19 +62,6 @@
             </field>
         </record>
         
-        <!-- Action pour la configuration Zoho -->
-        <record id="action_zoho_status" model="ir.actions.act_window">
-            <field name="name">Configuration Zoho</field>
-            <field name="res_model">ir.config_parameter</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_zoho_status_form"/>
-            <field name="target">current</field>
-            <field name="context">{
-                'zoho_client_id': 1,
-                'zoho_client_secret': 1,
-                'zoho_refresh_token': 1
-            }</field>
-        </record>
         
         <!-- Vue list pour la configuration Zoho -->
         <record id="view_zoho_status_list" model="ir.ui.view">
