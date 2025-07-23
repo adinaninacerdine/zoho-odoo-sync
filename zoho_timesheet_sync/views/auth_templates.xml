@@ -63,5 +63,43 @@
             </html>
         </template>
         
+        <!-- Template de redirection -->
+        <template id="auth_redirect_template" name="Zoho Auth Redirect">
+            <html>
+                <head>
+                    <title>Redirection Zoho</title>
+                    <meta charset="utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f8f9fa; }
+                        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                        .spinner { color: #007bff; font-size: 48px; margin-bottom: 20px; animation: spin 1s linear infinite; }
+                        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                        h1 { color: #333; margin-bottom: 20px; }
+                        p { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+                        .btn { display: inline-block; padding: 12px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+                        .btn:hover { background: #0056b3; }
+                    </style>
+                    <script>
+                        window.onload = function() {
+                            // Redirection automatique après 2 secondes
+                            setTimeout(function() {
+                                window.location.href = "<t t-esc="auth_url"/>";
+                            }, 2000);
+                        };
+                    </script>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="spinner">🔄</div>
+                        <h1><t t-esc="title"/></h1>
+                        <p>Vous allez être redirigé vers Zoho pour l'authentification...</p>
+                        <p><strong>URL de destination:</strong><br/><code><t t-esc="auth_url"/></code></p>
+                        <a t-att-href="auth_url" class="btn">Cliquer si la redirection ne fonctionne pas</a>
+                    </div>
+                </body>
+            </html>
+        </template>
+        
     </data>
 </odoo>

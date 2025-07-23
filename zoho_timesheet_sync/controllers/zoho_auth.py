@@ -37,7 +37,12 @@ class ZohoAuthController(http.Controller):
             auth_url = f"https://accounts.zoho.com/oauth/v2/auth?{urlencode(oauth_params)}"
             
             _logger.info("Redirecting to Zoho OAuth: %s", auth_url)
-            return request.redirect(auth_url)
+            
+            # Template de redirection HTML
+            return request.render('zoho_timesheet_sync.auth_redirect_template', {
+                'auth_url': auth_url,
+                'title': 'Redirection vers Zoho'
+            })
             
         except Exception as e:
             _logger.error("Auth start error: %s", e)
