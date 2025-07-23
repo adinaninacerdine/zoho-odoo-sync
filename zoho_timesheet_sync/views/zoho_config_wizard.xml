@@ -76,5 +76,17 @@
             }</field>
         </record>
         
+        <!-- Vue list pour la configuration Zoho -->
+        <record id="view_zoho_status_list" model="ir.ui.view">
+            <field name="name">zoho.status.list</field>
+            <field name="model">ir.config_parameter</field>
+            <field name="arch" type="xml">
+                <list string="Configuration Zoho" create="false" edit="false" delete="false">
+                    <field name="key" string="Paramètre"/>
+                    <field name="value" string="Valeur" password="key in ['zoho.client_secret', 'zoho.refresh_token']"/>
+                </list>
+            </field>
+        </record>
+        
     </data>
 </odoo>

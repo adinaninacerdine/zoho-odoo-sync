@@ -77,6 +77,23 @@
             </field>
         </record>
         
+        <!-- Vue list pour l'assistant de synchronisation -->
+        <record id="view_mass_sync_wizard_list" model="ir.ui.view">
+            <field name="name">zoho.mass.sync.wizard.list</field>
+            <field name="model">zoho.mass.sync.wizard</field>
+            <field name="arch" type="xml">
+                <list string="Synchronisations en Masse" create="false" edit="false">
+                    <field name="create_date" string="Date"/>
+                    <field name="success_count" string="Réussis"/>
+                    <field name="error_count" string="Erreurs"/>
+                    <field name="state" widget="badge" 
+                           decoration-success="state == 'done'"
+                           decoration-warning="state == 'running'"
+                           decoration-info="state == 'draft'"/>
+                </list>
+            </field>
+        </record>
+        
         <!-- Action définie dans zoho_menu.xml pour éviter les problèmes de référence -->
         
     </data>

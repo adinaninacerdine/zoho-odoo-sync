@@ -68,7 +68,20 @@
             </field>
         </record>
         
-        <!-- Vue liste sera ajoutée ultérieurement -->
+        <!-- Vue list pour les projets Zoho -->
+        <record id="view_project_project_list_zoho" model="ir.ui.view">
+            <field name="name">project.project.list.zoho</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_sync_status" widget="badge" 
+                           decoration-success="x_sync_status == 'synced'"
+                           decoration-warning="x_sync_status == 'pending'"
+                           decoration-danger="x_sync_status == 'error'"/>
+                </xpath>
+            </field>
+        </record>
         
         <!-- Action serveur pour synchronisation automatique (optionnelle) -->
         <record id="action_sync_project_server" model="ir.actions.server">

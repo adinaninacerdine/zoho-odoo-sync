@@ -201,7 +201,7 @@ class MassSyncWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'name': 'Projets Synchronisés',
             'res_model': 'project.project',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.project_ids.ids), ('x_sync_status', '=', 'synced')],
             'context': {'create': False}
         }
