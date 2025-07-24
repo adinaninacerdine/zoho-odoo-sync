@@ -24,7 +24,8 @@ class ZohoAuthController(http.Controller):
                 return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_id")
             
             # Paramètres OAuth
-            redirect_uri = request.env['ir.config_parameter'].get_param('web.base.url')
+            base_url = request.env['ir.config_parameter'].get_param('web.base.url')
+            redirect_uri = f"{base_url.rstrip('/')}/zoho/auth/callback"
             
             oauth_params = {
                 'scope': 'WorkDrive.files.ALL,ZohoCliq.Channels.ALL',
@@ -110,11 +111,14 @@ class ZohoAuthController(http.Controller):
         """Échange le code d'autorisation contre un refresh token"""
         config = request.env['ir.config_parameter'].sudo()
         
+        base_url = config.get_param('web.base.url')
+        redirect_uri = f"{base_url.rstrip('/')}/zoho/auth/callback"
+        
         data = {
             'grant_type': 'authorization_code',
             'client_id': config.get_param('zoho.client_id'),
             'client_secret': config.get_param('zoho.client_secret'),
-            'redirect_uri': config.get_param('web.base.url'),
+            'redirect_uri': redirect_uri,
             'code': code
         }
         
@@ -124,9 +128,14 @@ class ZohoAuthController(http.Controller):
             zoho_domain = config.get_param('zoho.domain', 'com')
             token_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/token"
             
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            
             response = requests.post(
                 token_url,
                 data=data,
+                headers=headers,
                 timeout=30
             )
             

@@ -39,6 +39,10 @@ class ZohoAPIService(models.TransientModel):
         if headers is None:
             headers = {}
         
+        # Set Content-Type for form data requests (OAuth token operations)
+        if data is not None and 'Content-Type' not in headers:
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        
         for attempt in range(self._zoho_retries):
             try:
                 response = requests.request(
