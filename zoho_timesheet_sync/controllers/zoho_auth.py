@@ -55,17 +55,32 @@ class ZohoAuthController(http.Controller):
         # Debug: Log tous les paramètres reçus
         _logger.info("Callback parameters received: %s", kwargs)
         
+        # Traiter les paramètres selon la documentation Zoho OAuth
         code = kwargs.get('code')
         error = kwargs.get('error')
         error_description = kwargs.get('error_description', '')
+        location = kwargs.get('location')
+        accounts_server = kwargs.get('accounts-server')
         
+        # Gestion des erreurs OAuth
         if error:
-            _logger.error("Zoho OAuth error: %s - %s", error, error_description)
-            return self._render_error(f"Erreur Zoho: {error} - {error_description}")
+            if error == 'access_denied':
+                _logger.warning("User denied Zoho OAuth authorization")
+                return self._render_error("Autorisation refusée par l'utilisateur")
+            else:
+                _logger.error("Zoho OAuth error: %s - %s", error, error_description)
+                return self._render_error(f"Erreur Zoho: {error} - {error_description}")
         
+        # Vérification du code d'autorisation
         if not code:
             _logger.error("No authorization code received. Full callback data: %s", kwargs)
             return self._render_error(f"Code d'autorisation manquant. Paramètres reçus: {list(kwargs.keys())}")
+        
+        # Log des paramètres additionnels Zoho
+        if location:
+            _logger.info("Zoho location parameter: %s", location)
+        if accounts_server:
+            _logger.info("Zoho accounts-server parameter: %s", accounts_server)
         
         try:
             # Échanger le code contre un refresh token
