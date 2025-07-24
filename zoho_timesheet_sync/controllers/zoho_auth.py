@@ -121,6 +121,7 @@ class ZohoAuthController(http.Controller):
         try:
             # Utiliser le même domaine pour le token
             zoho_domain = config.get_param('zoho.domain', 'com')
+            zoho_domain = config.get_param('zoho.domain', 'com')
             token_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/token"
             
             response = requests.post(
