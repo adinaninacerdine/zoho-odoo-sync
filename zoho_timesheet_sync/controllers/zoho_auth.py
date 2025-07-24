@@ -19,12 +19,12 @@ class ZohoAuthController(http.Controller):
             # Récupérer les paramètres Zoho
             config = request.env['ir.config_parameter'].sudo()
             client_id = config.get_param('zoho.client_id')
-            _logger.info(f"ZOHO CLIENT ID: {client_id}")
+            
             if not client_id:
                 return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_id")
             
             # Paramètres OAuth
-            redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/auth/zoho/callback"
+            redirect_uri = request.env['ir.config_parameter'].get_param('web.base.url')
             
             oauth_params = {
                 'scope': 'WorkDrive.files.ALL,ZohoCliq.Channels.ALL',
@@ -114,7 +114,7 @@ class ZohoAuthController(http.Controller):
             'grant_type': 'authorization_code',
             'client_id': config.get_param('zoho.client_id'),
             'client_secret': config.get_param('zoho.client_secret'),
-            'redirect_uri': f"{config.get_param('web.base.url')}/auth/zoho/callback",
+            'redirect_uri': config.get_param('web.base.url'),
             'code': code
         }
         
