@@ -23,7 +23,8 @@ class ZohoAPIService(models.TransientModel):
             'client_id': config.get_param('zoho.client_id'),
             'client_secret': config.get_param('zoho.client_secret'),
             'refresh_token': config.get_param('zoho.refresh_token'),
-            'base_url': config.get_param('zoho.base_url', 'https://www.zohoapis.com'),
+            'workdrive_base_url': config.get_param('zoho.workdrive_base_url', 'https://www.zohoapis.com'),
+            'cliq_base_url': config.get_param('zoho.cliq_base_url', 'https://cliq.zoho.com'),
             'token_url': config.get_param('zoho.token_url', 'https://accounts.zoho.com/oauth/v2/token')
         }
         
@@ -116,7 +117,7 @@ class ZohoAPIService(models.TransientModel):
             config = self._get_zoho_config()
             response = self._make_http_request(
                 'POST',
-                f"{config['base_url']}/workdrive/api/v1/files",
+                f"{config['workdrive_base_url']}/workdrive/api/v1/files",
                 headers=headers,
                 json=folder_data
             )
@@ -169,7 +170,7 @@ class ZohoAPIService(models.TransientModel):
             config = self._get_zoho_config()
             response = self._make_http_request(
                 'POST',
-                f"{config['base_url']}/cliq/api/v2/channels/{project.x_cliq_channel}/messages",
+                f"{config['cliq_base_url']}/api/v2/channels/{project.x_cliq_channel}/messages",
                 headers=headers,
                 json=cliq_data
             )

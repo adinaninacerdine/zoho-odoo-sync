@@ -3,9 +3,14 @@
     <data noupdate="1">
         
         <!-- Paramètres par défaut Zoho -->
-        <record id="zoho_base_url_default" model="ir.config_parameter">
-            <field name="key">zoho.base_url</field>
+        <record id="zoho_workdrive_base_url_default" model="ir.config_parameter">
+            <field name="key">zoho.workdrive_base_url</field>
             <field name="value">https://www.zohoapis.com</field>
+        </record>
+        
+        <record id="zoho_cliq_base_url_default" model="ir.config_parameter">
+            <field name="key">zoho.cliq_base_url</field>
+            <field name="value">https://cliq.zoho.com</field>
         </record>
         
         
