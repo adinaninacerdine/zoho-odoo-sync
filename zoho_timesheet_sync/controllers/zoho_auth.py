@@ -19,7 +19,7 @@ class ZohoAuthController(http.Controller):
             # Récupérer les paramètres Zoho
             config = request.env['ir.config_parameter'].sudo()
             client_id = config.get_param('zoho.client_id')
-            
+            _logger.info(f"ZOHO CLIENT ID: {client_id}")
             if not client_id:
                 return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_id")
             
@@ -50,7 +50,7 @@ class ZohoAuthController(http.Controller):
             _logger.error("Auth start error: %s", e)
             return self._render_error(f"Erreur d'authentification: {str(e)}")
     
-    @http.route('/auth/zoho/callback', type='http', auth='public', methods=['GET', 'POST'])  
+    @http.route(['/auth/zoho/callback', '/zoho/auth/callback'], type='http', auth='public', methods=['GET', 'POST'])  
     def auth_callback(self, **kwargs):
         """Callback après authentification Zoho"""
         
