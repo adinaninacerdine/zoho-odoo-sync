@@ -52,8 +52,12 @@ class ZohoAuthController(http.Controller):
     def auth_callback(self, **kwargs):
         """Callback après authentification Zoho"""
         
-        # Debug: Log tous les paramètres reçus
-        _logger.info("Callback parameters received: %s", kwargs)
+        # Debug: Log tous les paramètres reçus avec plus de détails
+        _logger.info("=== ZOHO OAUTH CALLBACK DEBUG ===")
+        _logger.info("Full request data: %s", dict(request.httprequest.args))
+        _logger.info("Callback kwargs: %s", kwargs)
+        _logger.info("Request method: %s", request.httprequest.method)
+        _logger.info("Request URL: %s", request.httprequest.url)
         
         # Traiter les paramètres selon la documentation Zoho OAuth
         code = kwargs.get('code')

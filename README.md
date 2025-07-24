@@ -16,7 +16,8 @@ Configurez les paramètres système suivants :
 - `zoho.client_id` : ID client de votre app Zoho
 - `zoho.client_secret` : Secret client de votre app Zoho  
 - `zoho.refresh_token` : Token de rafraîchissement
-- `zoho.base_url` : URL de base API (défaut: https://www.zohoapis.com)
+- `zoho.workdrive_base_url` : URL de base WorkDrive (défaut: https://www.zohoapis.com)
+- `zoho.cliq_base_url` : URL de base Cliq (défaut: https://cliq.zoho.com)
 
 ### Projets
 Dans chaque projet, configurez :
