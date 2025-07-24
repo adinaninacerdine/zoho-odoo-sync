@@ -27,7 +27,7 @@ class ZohoAuthController(http.Controller):
             redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/zoho/auth/callback"
             
             oauth_params = {
-                'scope': 'WorkDrive.files.READ,WorkDrive.files.CREATE,ZohoCliq.messages.CREATE',
+                'scope': 'WorkDrive.files.ALL,ZohoCliq.Channels.ALL',
                 'client_id': client_id,
                 'response_type': 'code',
                 'redirect_uri': redirect_uri,
