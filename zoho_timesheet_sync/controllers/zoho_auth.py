@@ -24,7 +24,7 @@ class ZohoAuthController(http.Controller):
                 return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_id")
             
             # Paramètres OAuth
-            redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/zoho/auth/callback"
+            redirect_uri = f"{request.env['ir.config_parameter'].get_param('web.base.url')}/auth/zoho/callback"
             
             oauth_params = {
                 'scope': 'WorkDrive.files.ALL,ZohoCliq.Channels.ALL',
@@ -48,7 +48,7 @@ class ZohoAuthController(http.Controller):
             _logger.error("Auth start error: %s", e)
             return self._render_error(f"Erreur d'authentification: {str(e)}")
     
-    @http.route('/zoho/auth/callback', type='http', auth='public', methods=['GET', 'POST'])  
+    @http.route('/auth/zoho/callback', type='http', auth='public', methods=['GET', 'POST'])  
     def auth_callback(self, **kwargs):
         """Callback après authentification Zoho"""
         
@@ -112,7 +112,7 @@ class ZohoAuthController(http.Controller):
             'grant_type': 'authorization_code',
             'client_id': config.get_param('zoho.client_id'),
             'client_secret': config.get_param('zoho.client_secret'),
-            'redirect_uri': f"{config.get_param('web.base.url')}/zoho/auth/callback",
+            'redirect_uri': f"{config.get_param('web.base.url')}/auth/zoho/callback",
             'code': code
         }
         
