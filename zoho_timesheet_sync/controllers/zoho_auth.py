@@ -19,9 +19,19 @@ class ZohoAuthController(http.Controller):
             # Récupérer les paramètres Zoho
             config = request.env['ir.config_parameter'].sudo()
             client_id = config.get_param('zoho.client_id')
+            client_secret = config.get_param('zoho.client_secret')
+            zoho_domain = config.get_param('zoho.domain', 'com')
+            
+            _logger.info("=== ZOHO AUTH START DEBUG ===")
+            _logger.info("Client ID configured: %s", bool(client_id))
+            _logger.info("Client Secret configured: %s", bool(client_secret))
+            _logger.info("Zoho domain: %s", zoho_domain)
             
             if not client_id:
                 return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_id")
+            
+            if not client_secret:
+                return self._render_error("Configuration Zoho manquante. Veuillez configurer zoho.client_secret")
             
             # Paramètres OAuth
             base_url = request.env['ir.config_parameter'].get_param('web.base.url')
@@ -35,10 +45,9 @@ class ZohoAuthController(http.Controller):
                 'access_type': 'offline'
             }
             
-            # Récupérer le domaine Zoho depuis la configuration (défaut: .com)
-            zoho_domain = config.get_param('zoho.domain', 'com')
             auth_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/auth?{urlencode(oauth_params)}"
             
+            _logger.info("OAuth parameters: %s", oauth_params)
             _logger.info("Redirecting to Zoho OAuth: %s", auth_url)
             
             # Template de redirection HTML
@@ -125,12 +134,17 @@ class ZohoAuthController(http.Controller):
         try:
             # Utiliser le même domaine pour le token
             zoho_domain = config.get_param('zoho.domain', 'com')
-            zoho_domain = config.get_param('zoho.domain', 'com')
             token_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/token"
             
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
+            
+            _logger.info("=== TOKEN EXCHANGE DEBUG ===")
+            _logger.info("Token URL: %s", token_url)
+            _logger.info("Client ID being sent: %s", data.get('client_id', 'NOT_SET'))
+            _logger.info("Grant type: %s", data.get('grant_type'))
+            _logger.info("Redirect URI: %s", data.get('redirect_uri'))
             
             response = requests.post(
                 token_url,
