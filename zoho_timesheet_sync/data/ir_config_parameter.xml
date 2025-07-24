@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
         
         <!-- Paramètres par défaut Zoho -->
-        <record id="zoho_workdrive_base_url_default" model="ir.config_parameter">
+        <record id="zoho_workdrive_base_url_param" model="ir.config_parameter">
             <field name="key">zoho.workdrive_base_url</field>
             <field name="value">https://www.zohoapis.com</field>
         </record>
         
-        <record id="zoho_cliq_base_url_default" model="ir.config_parameter">
+        <record id="zoho_cliq_base_url_param" model="ir.config_parameter">
             <field name="key">zoho.cliq_base_url</field>
             <field name="value">https://cliq.zoho.com</field>
         </record>
