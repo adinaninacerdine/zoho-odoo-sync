@@ -13,6 +13,11 @@
             <field name="value">https://cliq.zoho.com</field>
         </record>
         
+        <record id="zoho_domain_param" model="ir.config_parameter">
+            <field name="key">zoho.domain</field>
+            <field name="value">com</field>
+        </record>
+        
         
     </data>
 </odoo>

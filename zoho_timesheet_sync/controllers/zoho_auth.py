@@ -34,7 +34,9 @@ class ZohoAuthController(http.Controller):
                 'access_type': 'offline'
             }
             
-            auth_url = f"https://accounts.zoho.com/oauth/v2/auth?{urlencode(oauth_params)}"
+            # Récupérer le domaine Zoho depuis la configuration (défaut: .com)
+            zoho_domain = config.get_param('zoho.domain', 'com')
+            auth_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/auth?{urlencode(oauth_params)}"
             
             _logger.info("Redirecting to Zoho OAuth: %s", auth_url)
             
@@ -117,8 +119,12 @@ class ZohoAuthController(http.Controller):
         }
         
         try:
+            # Utiliser le même domaine pour le token
+            zoho_domain = config.get_param('zoho.domain', 'com')
+            token_url = f"https://accounts.zoho.{zoho_domain}/oauth/v2/token"
+            
             response = requests.post(
-                'https://accounts.zoho.com/oauth/v2/token',
+                token_url,
                 data=data,
                 timeout=30
             )
