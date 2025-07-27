@@ -98,35 +98,96 @@ class ZohoAPIService(models.TransientModel):
             _logger.error("Failed to get Zoho access token: %s", e)
             raise UserError(_("Unable to get Zoho access token: %s") % str(e))
 
-    def sync_project_to_workdrive(self, project_id):
-        """Synchronise un projet vers Zoho WorkDrive"""
-        project = self.env['project.project'].browse(project_id)
+    def get_workdrive_workspaces(self):
+        """Récupère la liste des workspaces WorkDrive"""
         token = self._get_access_token()
+        config = self._get_zoho_config()
+        
+        headers = {
+            'Authorization': f'Zoho-oauthtoken {token}'
+        }
+        
+        try:
+            response = self._make_http_request(
+                'GET',
+                f"{config['workdrive_base_url']}/workdrive/api/v1/ws",
+                headers=headers
+            )
+            return response.json()
+        except Exception as e:
+            _logger.error("Failed to get WorkDrive workspaces: %s", e)
+            raise UserError(_("Unable to get WorkDrive workspaces: %s") % str(e))
+
+    def create_workdrive_folder(self, folder_name, parent_id=None, workspace_id=None):
+        """Crée un dossier dans WorkDrive"""
+        token = self._get_access_token()
+        config = self._get_zoho_config()
+        
+        if not workspace_id:
+            workspaces = self.get_workdrive_workspaces()
+            if not workspaces.get('data'):
+                raise UserError(_("No WorkDrive workspaces found"))
+            workspace_id = workspaces['data'][0]['id']
         
         headers = {
             'Authorization': f'Zoho-oauthtoken {token}',
             'Content-Type': 'application/json'
         }
         
-        folder_data = {
-            'data': {
-                'attributes': {
-                    'name': project.name,
-                    'description': project.description or ''
+        data = {
+            "data": {
+                "type": "folder",
+                "attributes": {
+                    "name": folder_name,
+                    "parent_id": parent_id
                 }
             }
         }
         
         try:
-            config = self._get_zoho_config()
             response = self._make_http_request(
                 'POST',
-                f"{config['workdrive_base_url']}/workdrive/api/v1/files",
+                f"{config['workdrive_base_url']}/workdrive/api/v1/ws/{workspace_id}/files",
                 headers=headers,
-                json=folder_data
+                json=data
             )
-            
-            folder_info = response.json()
+            return response.json()
+        except Exception as e:
+            _logger.error("Failed to create WorkDrive folder: %s", e)
+            raise UserError(_("Unable to create WorkDrive folder: %s") % str(e))
+
+    def send_cliq_message(self, channel_unique_name, message):
+        """Envoie un message dans un canal Cliq"""
+        token = self._get_access_token()
+        config = self._get_zoho_config()
+        
+        headers = {
+            'Authorization': f'Zoho-oauthtoken {token}',
+            'Content-Type': 'application/json'
+        }
+        
+        data = {
+            "text": message
+        }
+        
+        try:
+            response = self._make_http_request(
+                'POST',
+                f"{config['cliq_base_url']}/api/v2/channelsbyname/{channel_unique_name}/message",
+                headers=headers,
+                json=data
+            )
+            return response.json()
+        except Exception as e:
+            _logger.error("Failed to send Cliq message: %s", e)
+            raise UserError(_("Unable to send Cliq message: %s") % str(e))
+
+    def sync_project_to_workdrive(self, project_id):
+        """Synchronise un projet vers Zoho WorkDrive"""
+        project = self.env['project.project'].browse(project_id)
+        
+        try:
+            folder_info = self.create_workdrive_folder(project.name)
             folder_id = folder_info.get('data', {}).get('id')
             
             if not folder_id:
@@ -153,39 +214,17 @@ class ZohoAPIService(models.TransientModel):
         if not project.x_cliq_channel:
             _logger.warning(f"Pas de canal Cliq configuré pour le projet {project.name}")
             return False
-            
-        token = self._get_access_token()
-        
-        headers = {
-            'Authorization': f'Zoho-oauthtoken {token}',
-            'Content-Type': 'application/json'
-        }
         
         message = f"🎯 Nouvelle tâche: {task.name}\n"
         message += f"📊 Priorité: {task.x_priority_score or 'Non définie'}\n"
         message += f"⏰ Heures planifiées: {task.planned_hours}h\n"
         message += f"👤 Assigné à: {task.user_ids[0].name if task.user_ids else 'Non assigné'}"
         
-        cliq_data = {
-            'text': message
-        }
-        
         try:
-            config = self._get_zoho_config()
-            response = self._make_http_request(
-                'POST',
-                f"{config['cliq_base_url']}/api/v2/channels/{project.x_cliq_channel}/messages",
-                headers=headers,
-                json=cliq_data
-            )
-            
-            if response.status_code == 201:
-                task.write({'x_last_sync': fields.Datetime.now()})
-                _logger.info("Task %s successfully synced to Cliq", task.name)
-                return True
-            else:
-                _logger.warning("Unexpected response code %s from Cliq API", response.status_code)
-                return False
+            self.send_cliq_message(project.x_cliq_channel, message)
+            task.write({'x_last_sync': fields.Datetime.now()})
+            _logger.info("Task %s successfully synced to Cliq", task.name)
+            return True
             
         except Exception as e:
             _logger.error("Cliq sync error for task %s: %s", task.name, e)
